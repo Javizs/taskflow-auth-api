@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Environment variables and local configuration
+.env
+.env.*
+!.env.example
+
+# Logs and runtime files
+*.log
+logs/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Test and coverage output
+coverage/
+.nyc_output/
+
+# Build and temporary output
+dist/
+build/
+tmp/
+temp/
+.cache/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local tooling files
+.eslintcache
+.npm/
