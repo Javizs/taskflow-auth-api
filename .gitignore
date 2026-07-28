@@ -6,6 +6,9 @@ node_modules/
 .env.*
 !.env.example
 
+# Local backups
+*.backup-*
+
 # Logs and runtime files
 *.log
 logs/
