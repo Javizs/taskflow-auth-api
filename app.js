@@ -11,7 +11,6 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/users", usersRouter);
-
 app.use((error, req, res, next) => {
     console.error(error);
 
