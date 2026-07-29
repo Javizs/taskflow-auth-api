@@ -7,3 +7,12 @@ export async function findAllUsers() {
 
     return rows;
 }
+
+export async function findUserById(id) {
+    const [rows] = await pool.execute(
+        "SELECT id, name, email, created_at FROM users WHERE id = ?",
+        [id]
+    );
+
+    return rows[0];
+}
