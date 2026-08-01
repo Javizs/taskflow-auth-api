@@ -1,4 +1,5 @@
 import { findAllUsers, findUserById } from "../repositories/users.repository.js";
+import { AppError } from "../utils/AppError.js";
 
 export async function getAllUsers() {
     const users = await findAllUsers();
@@ -11,10 +12,13 @@ export async function getAllUsers() {
     }));
 }
 export async function getUserByIdService(id) {
+     if (!Number.isInteger(id) || id <= 0){
+        throw new AppError("ID debe ser mayor que 0", 400)
+    }
     const user = await findUserById(id);
-
+   
     if (!user) {
-        return null;
+    throw new AppError("User not found", 404);
     }
 
     const { id: userId, name, email, created_at } = user;

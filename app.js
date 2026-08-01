@@ -1,6 +1,7 @@
 import express from "express";
 import usersRouter from "./routes/users.routes.js";
-
+import {errorHandler} from "./middlewares/errorHandler.js"
+import {notFoundHandler} from "./middlewares/notFoundHandler.js"
 const app = express();
 const PORT = 3000;
 
@@ -11,14 +12,10 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/users", usersRouter);
-app.use((error, req, res, next) => {
-    console.error(error);
 
-    res.status(500).json({
-        success: false,
-        error: "Internal server error"
-    });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
+
 
 app.listen(PORT, () => {
     console.log(`Servidor funcionando en http://localhost:${PORT}`);
