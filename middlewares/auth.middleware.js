@@ -31,7 +31,8 @@ if (!payload.sub) {
 
         // 7. Guardar:
         req.user = {
-            id: payload.sub
+            id: payload.sub,
+            role: payload.role
         };
 
         // 8. Continuar:
