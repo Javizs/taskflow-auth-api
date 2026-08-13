@@ -17,3 +17,11 @@ export async function findProjectsByUserId(userId) {
 
     return rows;
 }
+export async function findProjectById(id) {
+    const [rows] = await pool.execute(
+        "SELECT id, name, description, user_id, created_at FROM projects WHERE id = ?",
+        [id]
+    );
+
+    return rows[0];
+}
