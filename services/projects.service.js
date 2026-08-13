@@ -1,7 +1,8 @@
 import { AppError } from "../utils/AppError.js";
 import {
     createProject,
-    findProjectsByUserId
+    findProjectsByUserId,
+     findProjectById
 } from "../repositories/projects.repository.js";
 
 export async function createUserProject(data, userId) {
@@ -63,4 +64,28 @@ export async function getUserProjects(userId) {
             createdAt: created_at ?? null
         })
     );
+}
+export async function getUserProjectById(projectId, userId) {
+    if (!Number.isInteger(projectId) || projectId <= 0) {
+        throw new AppError("ID de proyecto no válido", 400);
+    }
+
+    if (!Number.isInteger(userId) || userId <= 0) {
+        throw new AppError("Usuario no válido", 401);
+    }
+    const project = await findProjectById(projectId);
+
+if (!project) {
+    throw new AppError("Proyecto no encontrado", 404);
+}
+if (project.user_id !== userId) {
+    throw new AppError("No tienes permiso para acceder a este proyecto", 403);
+}
+return {
+    id: project.id,
+    name: project.name,
+    description: project.description,
+    userId: project.user_id,
+    createdAt: project.created_at ?? null
+};
 }
