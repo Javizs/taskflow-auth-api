@@ -5,6 +5,7 @@ import {notFoundHandler} from "./middlewares/notFoundHandler.js"
 import authRouter from "./routes/auth.routes.js";
 import projectsRouter from "./routes/projects.routes.js";
 import adminRouter from "./routes/admin.routes.js";
+import tasksRouter from "./routes/tasks.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/tasks", tasksRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
