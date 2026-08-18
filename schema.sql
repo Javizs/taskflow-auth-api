@@ -26,6 +26,8 @@ CREATE TABLE tasks (
     title VARCHAR(150) NOT NULL,
     description TEXT,
     completed BOOLEAN DEFAULT FALSE,
+    status ENUM('pending', 'in_progress', 'completed') NOT NULL DEFAULT 'pending',
+    priority ENUM('low', 'medium', 'high') NOT NULL DEFAULT 'medium',
     project_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

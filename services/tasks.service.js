@@ -1,6 +1,10 @@
 import { AppError } from "../utils/AppError.js";
 import { findProjectById } from "../repositories/projects.repository.js";
-import { insertTask } from "../repositories/tasks.repository.js";
+import {
+    insertTask,
+    findProjectWithTasks,
+    findTasks
+} from "../repositories/tasks.repository.js";
 
 export async function createProjectTask(data, projectId, userId) {
     if (!Number.isInteger(projectId) || projectId <= 0) {
@@ -26,7 +30,6 @@ export async function createProjectTask(data, projectId, userId) {
 
     return { id, title, projectId };
 }
-import { findProjectWithTasks } from "../repositories/tasks.repository.js";
 
 export async function getProjectTasks(projectId, userId) {
     if (!Number.isInteger(projectId) || projectId <= 0) {
@@ -53,4 +56,56 @@ export async function getProjectTasks(projectId, userId) {
                 title: row.task_title
             }))
     };
+}
+
+function normalizeFilter(value, name) {
+    if (value === undefined) return undefined;
+
+    if (typeof value !== "string" || !value.trim()) {
+        throw new AppError(`${name} no válido`, 400);
+    }
+
+    return value.trim().toLowerCase();
+}
+
+function normalizeInteger(value, name, defaultValue, minimum, maximum) {
+    if (value === undefined) return defaultValue;
+
+    if (typeof value !== "string" || !/^\d+$/.test(value)) {
+        throw new AppError(`${name} no válido`, 400);
+    }
+
+    const number = Number(value);
+
+    if (number < minimum || number > maximum) {
+        throw new AppError(`${name} no válido`, 400);
+    }
+
+    return number;
+}
+
+export async function getTasksByFilters(filters, userId) {
+    const allowedStatus = ["pending", "in_progress", "completed"];
+    const allowedPriorities = ["low", "medium", "high"];
+
+    const status = normalizeFilter(filters.status, "Status");
+    const priority = normalizeFilter(filters.priority, "Priority");
+    const limit = normalizeInteger(filters.limit, "Limit", 50, 1, 100);
+    const offset = normalizeInteger(
+        filters.offset,
+        "Offset",
+        0,
+        0,
+        Number.MAX_SAFE_INTEGER
+    );
+
+    if (status && !allowedStatus.includes(status)) {
+        throw new AppError("Status no válido", 400);
+    }
+
+    if (priority && !allowedPriorities.includes(priority)) {
+        throw new AppError("Priority no válida", 400);
+    }
+
+    return findTasks({ status, priority, limit, offset }, userId);
 }
